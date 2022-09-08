@@ -101,20 +101,21 @@ district_id=${districtId};`;
 //API DELETE-Deletes a district from the district table based on the district ID
 
 app.delete("/districts/:districtId/", async (request, response) => {
-  const { deleteDistrictId } = request.params;
+  const { districtId } = request.params;
+  //console.log(districtId);
   const deleteDistrictQuery = `
     DELETE FROM 
     district 
-    WHERE district_id= "${deleteDistrictId}";`;
+    WHERE district_id= ${districtId};`;
 
-  const deletedDistrict = await db.run(deleteDistrictQuery);
+  await db.run(deleteDistrictQuery);
   response.send("District Removed");
 });
 
 //API -PUT Updates the details of a specific district based on the district ID
 
 app.put("/districts/:districtId/", async (request, response) => {
-  const { districtUpdateId } = request.params;
+  const { districtId } = request.params;
   const { districtName, stateId, cases, cured, active, deaths } = request.body;
 
   const updateDistrictQuery = `
@@ -128,7 +129,7 @@ app.put("/districts/:districtId/", async (request, response) => {
     active = ${active},
     deaths = ${deaths} 
     WHERE 
-    district_id= "${districtUpdateId}";`;
+    district_id= ${districtId};`;
   const updateDistResponse = await db.run(updateDistrictQuery);
   response.send("District Details Updated");
 });
